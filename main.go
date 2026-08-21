@@ -51,6 +51,10 @@ func splitcara(s string) [][]rune {
 // affiche les caracteres du fichier
 func printCara(file []string, cara [][]rune) {
 	for j := 0; j < len(cara); j++ {
+		if len(cara[j]) == 0 {
+			fmt.Println()
+			continue
+		}
 		for i := 0; i <= 8; i++ {
 			for e := 0; e < len(cara[j]); e++ {
 				poslettre := (cara[j][e] - ' ') * 9
