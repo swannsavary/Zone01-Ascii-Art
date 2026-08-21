@@ -24,22 +24,14 @@ func splitcara(s string) [][]rune {
 	var result [][]rune
 	s2 := []rune(s)
 	s3 := []rune{}
-	dejavu := false
 	for i := 0; i < len(s2); i++ {
 		if s2[i] == '\\' && s2[i+1] == 'n' {
-			if dejavu {
-				result = append(result, s3)
-			}
-			if len(s3) != 0 {
-				result = append(result, s3)
-				dejavu = true
-			}
+			result = append(result, s3)
 			s3 = []rune{}
 		} else if i != 0 && s2[i-1] == '\\' && s2[i] == 'n' {
 			continue
 		} else {
 			s3 = append(s3, s2[i])
-			dejavu = false
 		}
 	}
 	if len(s3) != 0 {
