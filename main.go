@@ -75,6 +75,5 @@ func whoFile(args []string) ([]byte, error) {
 		return nil, errors.New("need 1 or 2 argument")
 
 	}
-
 	return os.ReadFile(nomDuFichier)
 }
