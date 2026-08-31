@@ -40,7 +40,7 @@ func splitcara(s string) [][]rune {
 	return result
 }
 
-// affiche les caracteres du fichier
+// affiche les caracteres du fichier en mode art
 func printCara(file []string, cara [][]rune) {
 	for j := 0; j < len(cara); j++ {
 		if len(cara[j]) == 0 {
@@ -59,14 +59,14 @@ func printCara(file []string, cara [][]rune) {
 	}
 }
 
-// structure qui lie le numero optionnel au fichier correspondant
+// structure qui lie le nom d'un fichier au fichier .txt correspondant
 var banners = map[string]string{
 	"standard":   "standard.txt",
 	"shadow":     "shadow.txt",
 	"thinkertoy": "thinkertoy.txt",
 }
 
-// renvoie le bonne fichier a exploiter en fonction du numero optionnel
+// renvoie le bonne fichier a exploiter en fonction du nom du ficher optionnel
 func whoFile(args []string) ([]byte, error) {
 	nomDuFichier := "standard.txt"
 	if len(args) == 2 {
