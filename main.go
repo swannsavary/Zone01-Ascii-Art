@@ -61,9 +61,9 @@ func printCara(file []string, cara [][]rune) {
 
 // structure qui lie le numero optionnel au fichier correspondant
 var banners = map[string]string{
-	"1": "standard.txt",
-	"2": "shadow.txt",
-	"3": "thinkertoy.txt",
+	"standard":   "standard.txt",
+	"shadow":     "shadow.txt",
+	"thinkertoy": "thinkertoy.txt",
 }
 
 // renvoie le bonne fichier a exploiter en fonction du numero optionnel
