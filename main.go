@@ -1,81 +1,25 @@
 package main
 
 import (
-	"errors"
-	"fmt"
+	"ascii-art/tools"
 	"os"
-	"strings"
 )
 
 func main() {
 	args := os.Args[1:]
-	file, err := whoFile(args)
+	posOfWrite := 0
+	file, color, motAColorer, err := tools.Formatage(args)
 	if err != nil {
-		fmt.Println(err)
+		os.Stderr.WriteString(err.Error() + "\n")
 		return
 	}
-	caractere := splitcara(args[0])
-	file2 := strings.Split(string(file), "\n")
-	printCara(file2, caractere)
-}
-
-// separe les caractere d'un string et le separe en un slice de slice de rune a chaque \n
-func splitcara(s string) [][]rune {
-	var result [][]rune
-	s2 := []rune(s)
-	s3 := []rune{}
-	for i := 0; i < len(s2); i++ {
-		if s2[i] == '\\' && s2[i+1] == 'n' {
-			result = append(result, s3)
-			s3 = []rune{}
-		} else if i != 0 && s2[i-1] == '\\' && s2[i] == 'n' {
-			continue
-		} else {
-			s3 = append(s3, s2[i])
-		}
+	if color != "" {
+		posOfWrite++
 	}
-	if len(s3) != 0 {
-		result = append(result, s3)
+	if motAColorer != "" {
+		posOfWrite++
 	}
-	return result
-}
-
-// affiche les caracteres du fichier en mode art
-func printCara(file []string, cara [][]rune) {
-	for j := 0; j < len(cara); j++ {
-		if len(cara[j]) == 0 {
-			fmt.Println()
-			continue
-		}
-		for i := 0; i <= 8; i++ {
-			for e := 0; e < len(cara[j]); e++ {
-				poslettre := (cara[j][e] - ' ') * 9
-				fmt.Print(file[i+int(poslettre)])
-			}
-			if i != 0 {
-				fmt.Println()
-			}
-		}
-	}
-}
-
-// structure qui lie le nom d'un fichier au fichier .txt correspondant
-var banners = map[string]string{
-	"standard":   "standard.txt",
-	"shadow":     "shadow.txt",
-	"thinkertoy": "thinkertoy.txt",
-}
-
-// renvoie le bonne fichier a exploiter en fonction du nom du ficher optionnel
-func whoFile(args []string) ([]byte, error) {
-	nomDuFichier := "standard.txt"
-	if len(args) == 2 {
-		if chemin, exist := banners[args[1]]; exist {
-			nomDuFichier = chemin
-		}
-	} else if len(args) != 1 {
-		return nil, errors.New("need 1 or 2 argument")
-
-	}
-	return os.ReadFile(nomDuFichier)
+	caractere := tools.Splitcara(args[posOfWrite])
+	file2 := tools.SplitByRune(string(file), '\n')
+	tools.PrintCara(file2, caractere, color, motAColorer)
 }
