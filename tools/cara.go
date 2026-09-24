@@ -27,8 +27,8 @@ func Splitcara(s string) [][]rune {
 // affiche les caracteres du fichier en mode art
 func PrintCara(file []string, cara [][]rune, color string, caraAColorer string) {
 	var result string
-	var fin []int
-	var debut []int
+	var fin = []int{0}
+	var debut = []int{0}
 	for j := 0; j < len(cara); j++ {
 		if len(cara[j]) == 0 {
 			result += "\n"
@@ -44,23 +44,25 @@ func PrintCara(file []string, cara [][]rune, color string, caraAColorer string) 
 
 				// À déterminer : est-ce que le caractère e
 				// appartient à une occurrence de caraAColorer ?
-				if e+len([]rune(caraAColorer)) < len(cara[j]) && string(cara[j][e:e+len([]rune(caraAColorer))]) == caraAColorer {
-					debut = append(debut, e)
-					fin = append(fin, e+len([]rune(caraAColorer)))
+				if e+len([]rune(caraAColorer)) <= len(cara[j]) && string(cara[j][e:e+len([]rune(caraAColorer))]) == caraAColorer {
+					if debut[len(debut)-1] != e {
+						debut = append(debut, e)
+					}
+					if fin[len(fin)-1] != e+len([]rune(caraAColorer)) {
+						fin = append(fin, e+len([]rune(caraAColorer)))
+					}
 					result += colors[color] + file[i+int(poslettre)]
 				} else {
 					if e > debut[len(debut)-1] && e < fin[len(fin)-1] {
 						result += file[i+int(poslettre)]
 					} else {
-						result += file[i+int(poslettre)] + colors["reset"]
+						result += colors["reset"] + file[i+int(poslettre)]
 					}
-
 				}
 			}
 
 			result += "\n"
 		}
 	}
-
 	os.Stdout.WriteString(result)
 }
