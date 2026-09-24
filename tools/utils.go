@@ -1,5 +1,6 @@
 package tools
 
+// split un string en fonction d'une rune en []string
 func SplitByRune(str string, r rune) []string {
 	var result []string
 	var mot []rune

@@ -24,7 +24,7 @@ func Splitcara(s string) [][]rune {
 	return result
 }
 
-// affiche les caracteres du fichier en mode art
+// affiche les caracteres du fichier en mode art en fonction de la couleur et/ou seulement le cara donner en option
 func PrintCara(file []string, cara [][]rune, color string, caraAColorer string) {
 	var result string
 	var fin = []int{0}
@@ -41,9 +41,6 @@ func PrintCara(file []string, cara [][]rune, color string, caraAColorer string) 
 					result += colors[color] + file[i+int(poslettre)] + colors["reset"]
 					continue
 				}
-
-				// À déterminer : est-ce que le caractère e
-				// appartient à une occurrence de caraAColorer ?
 				if e+len([]rune(caraAColorer)) <= len(cara[j]) && string(cara[j][e:e+len([]rune(caraAColorer))]) == caraAColorer {
 					if debut[len(debut)-1] != e {
 						debut = append(debut, e)
@@ -60,7 +57,6 @@ func PrintCara(file []string, cara [][]rune, color string, caraAColorer string) 
 					}
 				}
 			}
-
 			result += "\n"
 		}
 	}

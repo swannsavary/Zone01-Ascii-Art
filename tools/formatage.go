@@ -12,6 +12,7 @@ var banners = map[string]string{
 	"thinkertoy": "thinkertoy.txt",
 }
 
+// prend les argument dooner et renvoie chaque option et le bon fichier a exploiter
 func Formatage(args []string) ([]byte, string, string, error) {
 	args2 := args
 	file, inArg, err := optionfile(args2)
