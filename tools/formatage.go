@@ -22,8 +22,11 @@ func Formatage(args []string) ([]byte, string, string, string, error) {
 	if inArg {
 		args2 = args[:len(args)-1]
 	}
-	color, motacolorer := option_color(args2)
 	output := option_output(args2)
+	if output != "" {
+		args2 = args[1:]
+	}
+	color, motacolorer := option_color(args2)
 	return file, color, motacolorer, output, nil
 }
 
@@ -59,6 +62,7 @@ func option_color(args []string) (string, string) {
 	return color, motAColorer
 }
 
+// renvoie le nom du fichier ou le resultat sera ecrit
 func option_output(args []string) string {
 	file := ""
 	if len(args) > 1 {

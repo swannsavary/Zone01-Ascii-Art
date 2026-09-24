@@ -24,7 +24,7 @@ func Splitcara(s string) [][]rune {
 	return result
 }
 
-// affiche les caracteres du fichier en mode art en fonction de la couleur et/ou seulement le cara donner en option
+// affiche les caracteres du fichier en mode art en fonction de la couleur et/ou seulement du caractere donner en option
 func PrintCara(file []string, cara [][]rune, color string, caraAColorer string, output string) {
 	var result string
 	var fin = []int{0}
