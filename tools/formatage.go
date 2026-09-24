@@ -12,21 +12,23 @@ var banners = map[string]string{
 	"thinkertoy": "thinkertoy.txt",
 }
 
-// prend les argument dooner et renvoie chaque option et le bon fichier a exploiter
-func Formatage(args []string) ([]byte, string, string, error) {
+// prend les argument donner et renvoie chaque option et le bon fichier a exploiter
+func Formatage(args []string) ([]byte, string, string, string, error) {
 	args2 := args
-	file, inArg, err := optionfile(args2)
+	file, inArg, err := option_file(args2)
 	if err != nil {
-		return file, "", "", err
+		return file, "", "", "", err
 	}
 	if inArg {
 		args2 = args[:len(args)-1]
 	}
-	color, motacolorer := optioncolor(args2)
-	return file, color, motacolorer, nil
+	color, motacolorer := option_color(args2)
+	output := option_output(args2)
+	return file, color, motacolorer, output, nil
 }
 
-func optionfile(args []string) ([]byte, bool, error) {
+// renvoie le bon fichier a exploiter
+func option_file(args []string) ([]byte, bool, error) {
 	nomDuFichier := "standard.txt"
 	if len(args) == 0 {
 		return nil, false, errors.New("need 1 or more arguments")
@@ -42,7 +44,8 @@ func optionfile(args []string) ([]byte, bool, error) {
 	return file, false, err
 }
 
-func optioncolor(args []string) (string, string) {
+// renvoie la bonne couleur a utiliser et le mot a colorer si il y en a
+func option_color(args []string) (string, string) {
 	color := ""
 	motAColorer := ""
 	if len(args) > 1 {
@@ -54,4 +57,14 @@ func optioncolor(args []string) (string, string) {
 		}
 	}
 	return color, motAColorer
+}
+
+func option_output(args []string) string {
+	file := ""
+	if len(args) > 1 {
+		if args[0][:9] == "--output=" {
+			file = args[0][9:]
+		}
+	}
+	return file
 }

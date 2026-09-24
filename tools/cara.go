@@ -25,7 +25,7 @@ func Splitcara(s string) [][]rune {
 }
 
 // affiche les caracteres du fichier en mode art en fonction de la couleur et/ou seulement le cara donner en option
-func PrintCara(file []string, cara [][]rune, color string, caraAColorer string) {
+func PrintCara(file []string, cara [][]rune, color string, caraAColorer string, output string) {
 	var result string
 	var fin = []int{0}
 	var debut = []int{0}
@@ -37,28 +37,39 @@ func PrintCara(file []string, cara [][]rune, color string, caraAColorer string) 
 		for i := 0; i < 9; i++ {
 			for e := 0; e < len(cara[j]); e++ {
 				poslettre := (cara[j][e] - ' ') * 9
-				if caraAColorer == "" {
-					result += colors[color] + file[i+int(poslettre)] + colors["reset"]
-					continue
-				}
-				if e+len([]rune(caraAColorer)) <= len(cara[j]) && string(cara[j][e:e+len([]rune(caraAColorer))]) == caraAColorer {
-					if debut[len(debut)-1] != e {
-						debut = append(debut, e)
+				if color != "" {
+					if caraAColorer == "" {
+						result += colors[color] + file[i+int(poslettre)] + colors["reset"]
+						continue
 					}
-					if fin[len(fin)-1] != e+len([]rune(caraAColorer)) {
-						fin = append(fin, e+len([]rune(caraAColorer)))
-					}
-					result += colors[color] + file[i+int(poslettre)]
-				} else {
-					if e > debut[len(debut)-1] && e < fin[len(fin)-1] {
-						result += file[i+int(poslettre)]
+					if e+len([]rune(caraAColorer)) <= len(cara[j]) && string(cara[j][e:e+len([]rune(caraAColorer))]) == caraAColorer {
+						if debut[len(debut)-1] != e {
+							debut = append(debut, e)
+						}
+						if fin[len(fin)-1] != e+len([]rune(caraAColorer)) {
+							fin = append(fin, e+len([]rune(caraAColorer)))
+						}
+						result += colors[color] + file[i+int(poslettre)]
 					} else {
-						result += colors["reset"] + file[i+int(poslettre)]
+						if e > debut[len(debut)-1] && e < fin[len(fin)-1] {
+							result += file[i+int(poslettre)]
+						} else {
+							result += colors["reset"] + file[i+int(poslettre)]
+						}
 					}
+				} else {
+					result += file[i+int(poslettre)]
 				}
 			}
 			result += "\n"
 		}
 	}
-	os.Stdout.WriteString(result)
+	if output != "" {
+		err := os.WriteFile(output, []byte(result), 0644)
+		if err != nil {
+			os.Stderr.WriteString(err.Error() + "\n")
+		}
+	} else {
+		os.Stdout.WriteString(result)
+	}
 }
