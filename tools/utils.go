@@ -14,3 +14,15 @@ func SplitByRune(str string, r rune) []string {
 	}
 	return result
 }
+
+func hasPrefixe(mot string, prefix string) bool {
+	if prefix > mot {
+		return false
+	}
+	for index, c := range prefix {
+		if c != rune(mot[index]) {
+			return false
+		}
+	}
+	return true
+}

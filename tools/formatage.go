@@ -5,29 +5,34 @@ import (
 	"os"
 )
 
-// structure qui lie le nom d'un fichier au fichier .txt correspondant
+// map qui lie le nom d'un fichier au fichier .txt correspondant
 var banners = map[string]string{
 	"standard":   "standard.txt",
 	"shadow":     "shadow.txt",
 	"thinkertoy": "thinkertoy.txt",
 }
 
-// prend les argument donner et renvoie chaque option et le bon fichier a exploiter
-func Formatage(args []string) ([]byte, string, string, string, error) {
+// prend les arguments donner et renvoie chaque option et le bon fichier a exploiter
+func Formatage(args []string) ([]byte, string, string, string, string, error) {
 	args2 := args
+	var output, color, motacolorer, align string
 	file, inArg, err := option_file(args2)
 	if err != nil {
-		return file, "", "", "", err
+		return file, "", "", "", "", err
 	}
 	if inArg {
-		args2 = args[:len(args)-1]
+		args2 = args2[:len(args2)-1]
 	}
-	output := option_output(args2)
-	if output != "" {
-		args2 = args[1:]
+	for index, option := range args2[:len(args2)-1] {
+		if hasPrefixe(option, "--output=") {
+			output = option[9:]
+		} else if hasPrefixe(option, "--color=") {
+			color, motacolorer = option_color(args2, index)
+		} else if hasPrefixe(option, "--align=") {
+			align = option[8:]
+		}
 	}
-	color, motacolorer := option_color(args2)
-	return file, color, motacolorer, output, nil
+	return file, color, motacolorer, output, align, nil
 }
 
 // renvoie le bon fichier a exploiter
@@ -48,27 +53,16 @@ func option_file(args []string) ([]byte, bool, error) {
 }
 
 // renvoie la bonne couleur a utiliser et le mot a colorer si il y en a
-func option_color(args []string) (string, string) {
+func option_color(args []string, index int) (string, string) {
 	color := ""
 	motAColorer := ""
 	if len(args) > 1 {
-		if args[0][:8] == "--color=" {
-			color = args[0][8:]
+		if hasPrefixe(args[index], "--color=") {
+			color = args[index][8:]
 		}
-		if len(args) == 3 {
-			motAColorer = args[1]
+		if len(args)-1 > index+1 && !hasPrefixe(args[index+1], "--") {
+			motAColorer = args[index+1]
 		}
 	}
 	return color, motAColorer
-}
-
-// renvoie le nom du fichier ou le resultat sera ecrit
-func option_output(args []string) string {
-	file := ""
-	if len(args) > 1 {
-		if args[0][:9] == "--output=" {
-			file = args[0][9:]
-		}
-	}
-	return file
 }
